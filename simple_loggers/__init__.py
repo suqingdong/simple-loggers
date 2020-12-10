@@ -3,13 +3,15 @@
 """
     A Simple Logger Package
 """
+import os
 import sys
+import json
 import logging
 
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-__version__ = '1.0.0'
-__author__ = 'suqingdong'
-__author_email__ = '1078595229@qq.com'
+version_info = json.load(open(os.path.join(BASE_DIR, 'version', 'version.json')))
+__version__ = version_info['version']
 
 
 class SimpleLogger(logging.Logger):
