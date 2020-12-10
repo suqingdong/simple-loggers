@@ -8,10 +8,15 @@ import sys
 import json
 import logging
 
+import coloredlogs
+
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 version_info = json.load(open(os.path.join(BASE_DIR, 'version', 'version.json')))
 __version__ = version_info['version']
+
+
+NOT_WINDOWS = not sys.platform.startswith('win')
 
 
 class SimpleLogger(logging.Logger):
@@ -47,12 +52,8 @@ class SimpleLogger(logging.Logger):
             self._addFilehandler(logfile, filemode)
         else:
             self._addStreamHandler(stream)
-            if colored:
-                try:
-                    import coloredlogs
-                    coloredlogs.install(fmt=fmt, level=level, logger=self)
-                except ImportError:
-                    logging.warning('coloredlogs is not installed.')
+            if colored and not NOT_WINDOWS:
+                coloredlogs.install(fmt=fmt, level=level, logger=self)
 
     def _addFilehandler(self, filename, filemode):
 
