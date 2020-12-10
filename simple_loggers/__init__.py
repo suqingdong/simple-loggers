@@ -52,7 +52,7 @@ class SimpleLogger(logging.Logger):
             self._addFilehandler(logfile, filemode)
         else:
             self._addStreamHandler(stream)
-            if colored and not NOT_WINDOWS:
+            if colored and NOT_WINDOWS:
                 coloredlogs.install(fmt=fmt, level=level, logger=self)
 
     def _addFilehandler(self, filename, filemode):
