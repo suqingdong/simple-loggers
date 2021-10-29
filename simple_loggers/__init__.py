@@ -16,9 +16,6 @@ version_info = json.load(open(os.path.join(BASE_DIR, 'version', 'version.json'))
 __version__ = version_info['version']
 
 
-NOT_WINDOWS = not sys.platform.startswith('win')
-
-
 class SimpleLogger(logging.Logger):
     """
         >>> from simple_loggers import SimpleLogger
@@ -36,12 +33,9 @@ class SimpleLogger(logging.Logger):
                  filemode='w',
                  stream=sys.stderr,
                  colored=True,
-                 debug=False,
                  **kwargs):
 
-        if debug:
-            level = logging.DEBUG
-        elif type(level) == str:
+        if type(level) == str:
             level = self.level_maps.get(level.lower(), 10)
 
         super(SimpleLogger, self).__init__(name, level)
@@ -52,7 +46,7 @@ class SimpleLogger(logging.Logger):
             self._addFilehandler(logfile, filemode)
         else:
             self._addStreamHandler(stream)
-            if colored and NOT_WINDOWS:
+            if colored:
                 coloredlogs.install(fmt=fmt, level=level, logger=self)
 
     def _addFilehandler(self, filename, filemode):
@@ -69,7 +63,7 @@ class SimpleLogger(logging.Logger):
 
     @property
     def level_maps(self):
-        levels = {
+        return {
             'debug': 10,
             'info': 20,
             'warn': 30,
@@ -78,24 +72,23 @@ class SimpleLogger(logging.Logger):
             'fatal': 50,
             'critical': 50,
         }
-        return levels
 
 
 if __name__ == '__main__':
 
-    logger = SimpleLogger(colored=True)
+    logger = SimpleLogger()
     logger.debug('debug message')
     logger.info('info message')
     logger.warning('warn message')
     logger.error('error message')
 
-    logger2 = SimpleLogger(name='TEST2', colored=False, logfile='out.log')
+    logger2 = SimpleLogger(name='TEST2', logfile='out.log', filemode='w')
     logger2.debug('debug message')
     logger2.info('info message')
     logger2.warning('warn message')
     logger2.error('error message')
 
-    logger3 = SimpleLogger(name='TEST3', level='info', fmt='%(asctime)s %(levelname)s: %(message)s')
+    logger3 = SimpleLogger(name='TEST3', level='info', fmt='[%(asctime)s %(levelname)s]: %(message)s')
     logger3.debug('debug message')
     logger3.info('info message')
     logger3.warning('warn message')

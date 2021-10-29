@@ -5,7 +5,8 @@ from setuptools import setup, find_packages
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-version_info = json.load(open(os.path.join(BASE_DIR, 'simple_loggers', 'version', 'version.json')))
+version_info = json.load(
+    open(os.path.join(BASE_DIR, 'simple_loggers', 'version', 'version.json')))
 
 
 setup(
@@ -21,7 +22,10 @@ setup(
         'Tracker': 'https://github.com/suqingdong/simple-loggers/issues',
     },
     license='BSD License',
-    install_requires=['coloredlogs'],
+    install_requires=[
+        'colorama',
+        'coloredlogs',
+    ],
     packages=find_packages(),
     include_package_data=True,
     classifiers=[
